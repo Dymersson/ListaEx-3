@@ -1,0 +1,150 @@
+Simular a operação de um cadastro de veículos de uma revenda. Existem dois
+tipos de veículos: Carro, e Moto. O diagrama UML com as classes necessárias
+para realizar tal simulação é apresentado:
+
+Deseja-se construir um programa que:
+Item (A): O usuário decide se deseja inserir uma moto ou um carro. Depois
+insere as informações necessárias e finalmente imprime o relatório com as
+características de cada veículo contido no cadastro.
+
+Item (B): Após o usuário inserir as informações deverá ser realizado um
+levantamento acerca das motos e carros. Primeiro será obtido o total de preços
+dos veículos contidos no cadastro. Depois, é verificado se uma moto tiver no
+campo ano um valor maior ou igual que 2008 seu valor será reajustado em
+10%. Se um carro tiver um valor no campo km um valor maior que 100000,
+então, seu valor será reduzido em 8%. Por fim, um novo cálculo acerca do total
+de preços é realizada e impressa.
+
+
+
+
+class Veiculo {
+    protected String modelo;
+    protected double preco;
+
+    public Veiculo(String m, double p) {
+        modelo = m;
+        preco = p;
+    }
+
+    public double getPreco() {
+        return preco;
+    }
+
+    public void printDados() {
+        System.out.println("Modelo: " + modelo + ", Preço: R$" + preco);
+    }
+}
+
+class Moto extends Veiculo {
+    private int ano;
+
+    public Moto(String m, double p, int a) {
+        super(m, p);
+        ano = a;
+    }
+
+    public double getPreco() {
+        if (ano >= 2008) {
+            return preco * 1.10;
+        } else {
+            return preco;
+        }
+    }
+
+    public void setAno(int a) {
+        ano = a;
+    }
+
+    public void insertData(String m, double p, int a) {
+        modelo = m;
+        preco = p;
+        ano = a;
+    }
+}
+
+class Carro extends Veiculo {
+    private double km;
+
+    public Carro(String m, double p, double k) {
+        super(m, p);
+        km = k;
+    }
+
+    public double getPreco() {
+        if (km > 100000) {
+            return preco * 0.92;
+        } else {
+            return preco;
+        }
+    }
+
+    public void setKm(double k) {
+        km = k;
+    }
+
+    public void insertData(String m, double p, double k) {
+        modelo = m;
+        preco = p;
+        km = k;
+    }
+}
+
+public class CadastroVeiculos {
+    public static void main(String[] args) {
+        // Criando um array para armazenar os veículos
+        Veiculo[] veiculos = new Veiculo[5];
+
+        // Simulando a inserção de motos e carros pelo usuário
+        for (int i = 0; i < veiculos.length; i++) {
+            if (i % 2 == 0) {
+                // Inserir uma moto
+                Moto moto = new Moto("Moto " + (i + 1), 10000.0, 2000 + i);
+                veiculos[i] = moto;
+            } else {
+                // Inserir um carro
+                Carro carro = new Carro("Carro " + (i + 1), 20000.0, 50000.0 + i * 10000);
+                veiculos[i] = carro;
+            }
+        }
+
+        // Imprimindo o relatório com as características de cada veículo
+        System.out.println("Relatório de Veículos:");
+        for (Veiculo veiculo : veiculos) {
+            veiculo.printDados();
+        }
+
+        // Levantamento dos preços dos veículos
+        double totalPrecosAntes = 0.0;
+        for (Veiculo veiculo : veiculos) {
+            totalPrecosAntes += veiculo.getPreco();
+        }
+
+        // Verificando e aplicando reajustes de valor nas motos e carros
+        for (Veiculo veiculo : veiculos) {
+            if (veiculo instanceof Moto) {
+                Moto moto = (Moto) veiculo;
+                moto.setAno(moto.ano); // Apenas para acionar o cálculo do novo preço
+            } else if (veiculo instanceof Carro) {
+                Carro carro = (Carro) veiculo;
+                carro.setKm(carro.km); // Apenas para acionar o cálculo do novo preço
+            }
+        }
+
+        // Novo levantamento dos preços dos veículos após os reajustes
+        double totalPrecosDepois = 0.0;
+        for (Veiculo veiculo : veiculos) {
+            totalPrecosDepois += veiculo.getPreco();
+        }
+
+        // Imprimindo o novo relatório com as características atualizadas de cada veículo
+        System.out.println("\nRelatório de Veículos Após Reajustes:");
+        for (Veiculo veiculo : veiculos) {
+            veiculo.printDados();
+        }
+
+        // Imprimindo os totais de preços antes e depois dos reajustes
+        System.out.println("\nTotal de Preços Antes dos Reajustes: R$" + totalPrecosAntes);
+        System.out.println("Total de Preços Após Reajustes: R$" + totalPrecosDepois);
+    }
+}
