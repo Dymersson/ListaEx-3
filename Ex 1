@@ -1,0 +1,142 @@
+Exercício 1: Uma loja que vende CD e DVDS deseja construir um cadastro
+com seus produtos. Para tanto, foi elaborado o diagrama de classes dado na
+Figura 1.1
+
+Figura 1.1: Hierarquia de classes para construir um cadastro de mídias.
+
+A Tabela 1.1 fornece uma descrição dos métodos que deverão ser elaborados
+para cada uma das classes.
+
+Método Descrição
+getTipo() Retorna uma String com o nome da classe.
+getDetalhes () Retorna uma String com as informações contidas nos campos.
+printDados( ) Imprime as informações contidas nos campos da classe. Para
+tanto, usa dois métodos para recuperar estas informações:
+getTipo() e getDetalhes(). Estas funções por sua vez são
+polimórficas, ou seja, seu tipo retorno varia de acordo com a classe
+escolhida, tal que este método é sobreposto nas subclasses.
+inserirDado s() Insere os dados necessários para se preencher os campos de um
+objeto de uma dada classe. Seu comportamento é polimórfico.
+Tabela 1.1: Descrição dos métodos a serem implementados.
+
+Além dos métodos descritos na Tabela 1.1, deverão ser criados os métodos get
+e set correspondentes para retornar e modificar o conteúdo dos campos,
+respectivamente, bem como os construtores com e sem parâmetros de cada
+classe. Criar um programa que simule o uso de um cadastro de CD e DVDs
+
+
+class Midia {
+    private int codigo;
+    private double preco;
+    private String nome;
+
+    public Midia() {
+    }
+
+    public Midia(int c, double p, String n) {
+        codigo = c;
+        preco = p;
+        nome = n;
+    }
+
+    public String getTipo() {
+        return "Midia";
+    }
+
+    public String getDetalhes() {
+        return "Código: " + codigo + ", Preço: " + preco + ", Nome: " + nome;
+    }
+
+    public void printDados() {
+        System.out.println(getTipo() + ": " + getDetalhes());
+    }
+
+    public void inserirDados(int c, double p, String n) {
+        codigo = c;
+        preco = p;
+        nome = n;
+    }
+}
+
+class DVD extends Midia {
+    private int nFaixas;
+
+    public DVD() {
+    }
+
+    public DVD(int c, double p, String n, int f) {
+        super(c, p, n);
+        nFaixas = f;
+    }
+
+    public String getTipo() {
+        return "DVD";
+    }
+
+    public String getDetalhes() {
+        return super.getDetalhes() + ", Número de Faixas: " + nFaixas;
+    }
+
+    public void setFaixas(int f) {
+        nFaixas = f;
+    }
+
+    public void inserirDados(int c, double p, String n, int f) {
+        super.inserirDados(c, p, n);
+        nFaixas = f;
+    }
+}
+
+class CD extends Midia {
+    private int nMusicas;
+
+    public CD() {
+    }
+
+    public CD(int c, double p, String n, int m) {
+        super(c, p, n);
+        nMusicas = m;
+    }
+
+    public String getTipo() {
+        return "CD";
+    }
+
+    public String getDetalhes() {
+        return super.getDetalhes() + ", Número de Músicas: " + nMusicas;
+    }
+
+    public void setMusicas(int m) {
+        nMusicas = m;
+    }
+
+    public void inserirDados(int c, double p, String n, int m) {
+        super.inserirDados(c, p, n);
+        nMusicas = m;
+    }
+}
+
+public class CadastroCDsDVDs {
+    public static void main(String[] args) {
+        // Exemplo de uso do cadastro de CDs e DVDs
+
+        // Criando objetos de CDs e DVDs
+        CD cd1 = new CD();
+        cd1.inserirDados(1, 19.99, "CD de Teste", 12);
+
+        DVD dvd1 = new DVD();
+        dvd1.inserirDados(2, 29.99, "DVD de Teste", 8);
+
+        // Imprimindo os dados das mídias
+        cd1.printDados();
+        dvd1.printDados();
+
+        // Alterando os dados das mídias
+        cd1.setMusicas(15);
+        dvd1.setFaixas(10);
+
+        // Imprimindo os dados atualizados das mídias
+        cd1.printDados();
+        dvd1.printDados();
+    }
+}
